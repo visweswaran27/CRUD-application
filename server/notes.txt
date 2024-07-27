@@ -1,0 +1,11 @@
+npm init -y
+npm i express cors
+npm i nodemon -D 
+
+npm create vite@latest
+npm intall
+npm i axios
+npm run dev
+
+
+
