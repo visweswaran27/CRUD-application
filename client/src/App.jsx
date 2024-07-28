@@ -9,13 +9,15 @@ function App() {
   const [userData, setUserData] = useState({ name: "", age: "", city: "" });
 
   // Replace 'http://localhost:8000' with your Render backend URL
-  const backendUrl = "https://crud-application-j56x.onrender.com";
+  const backendUrl = "https://crud-application-4.onrender.com";
 
   const getAllUsers = async () => {
+    console.log("HI")
     try {
       const res = await axios.get(`${backendUrl}/users`);
       setUsers(res.data);
       setFilteredUsers(res.data);
+      console.log(res)
     } catch (error) {
       console.error("Failed to fetch users:", error);
     }
