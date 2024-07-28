@@ -10,10 +10,7 @@ app.use(express.json());
 const port = 8000;
 
 app.use(
-  cors({
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PATCH", "DELETE"],
-  })
+  cors()
 );
 
 app.get("/users", (req, res) => {
