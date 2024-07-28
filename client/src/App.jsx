@@ -7,9 +7,13 @@ function App() {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [isModelOpen, setIsModelOpen] = useState(false);
   const [userData, setUserData] = useState({ name: "", age: "", city: "" });
+
+  // Replace 'http://localhost:8000' with your Render backend URL
+  const backendUrl = "https://crud-application-j56x.onrender.com";
+
   const getAllUsers = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/users");
+      const res = await axios.get(`${backendUrl}/users`);
       setUsers(res.data);
       setFilteredUsers(res.data);
     } catch (error) {
@@ -33,59 +37,60 @@ function App() {
   };
 
   const handleDelete = async (id) => {
-    const isConfirmed = window.confirm("Are you sure want to delete this users");
+    const isConfirmed = window.confirm(
+      "Are you sure want to delete this user?"
+    );
     if (isConfirmed) {
       try {
-        const res = await axios.delete(`http://localhost:8000/users/${id}`);
+        const res = await axios.delete(`${backendUrl}/users/${id}`);
         setUsers(res.data);
         setFilteredUsers(res.data);
       } catch (error) {
         console.error("Failed to delete user:", error);
       }
     }
-    
   };
 
   const handleAddRecord = () => {
-   setUserData({ name: "", age: "", city: "" });
+    setUserData({ name: "", age: "", city: "" });
     setIsModelOpen(true);
-  }
+  };
 
   const modelClose = () => {
     setIsModelOpen(false);
-    
-    
-  }
+  };
 
   const handleData = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
-  const handleSubmit = async(e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (userData.id) {
-       await axios.patch(`http://localhost:8000/users/${userData.id}`, userData).then((res) => {
-         console.log(res);
-       });
-       alert("Sucessfully Edited!");
-       setIsModelOpen(false);
-       getAllUsers();
-    }
-    else {
-       await axios.post("http://localhost:8000/users", userData).then((res) => {
-         console.log(res);
-       });
-       alert("Sucessfully added!");
-       setIsModelOpen(false);
-       getAllUsers();
+      await axios
+        .patch(`${backendUrl}/users/${userData.id}`, userData)
+        .then((res) => {
+          console.log(res);
+        });
+      alert("Successfully Edited!");
+      setIsModelOpen(false);
+      getAllUsers();
+    } else {
+      await axios.post(`${backendUrl}/users`, userData).then((res) => {
+        console.log(res);
+      });
+      alert("Successfully added!");
+      setIsModelOpen(false);
+      getAllUsers();
     }
     modelClose();
     setUserData({ name: "", age: "", city: "" });
   };
+
   const handleEdit = (user) => {
     setUserData(user);
     setIsModelOpen(true);
-    
-  }
+  };
 
   return (
     <>
@@ -121,7 +126,12 @@ function App() {
                   <td>{user.age}</td>
                   <td>{user.city}</td>
                   <td>
-                    <button onClick={()=>handleEdit(user)} className="btn green">Edit</button>
+                    <button
+                      onClick={() => handleEdit(user)}
+                      className="btn green"
+                    >
+                      Edit
+                    </button>
                   </td>
                   <td>
                     <button
@@ -141,7 +151,7 @@ function App() {
               <span onClick={modelClose} className="close">
                 &times;
               </span>
-              <h3>{userData.id ? "Update Record":"Add Record"}</h3>
+              <h3>{userData.id ? "Update Record" : "Add Record"}</h3>
               <div className="input-group">
                 <label htmlFor="name">Full Name:</label>
                 <input
@@ -168,7 +178,9 @@ function App() {
                   onChange={handleData}
                 />
               </div>
-              <button onClick={handleSubmit} className="btn green">{userData.id ? "Update User":"Add User"}</button>
+              <button onClick={handleSubmit} className="btn green">
+                {userData.id ? "Update User" : "Add User"}
+              </button>
             </div>
           </div>
         )}
